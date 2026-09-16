@@ -13,6 +13,8 @@ There are three major steps in accessing the audio signal streams on the Zybo Z7
 1. Configuring the audio codec
 2. Serialising the audio RX/TX streams
 3. Generating a block diagram
+4. Programming your Zybo with Vitis
+I'll go through each of these steps and, at the end, you should have a working audio bypass on your Zybo!
 
 # Configuring the audio codec
 Audio signals are received and transmitted through the audio codec of the FPGA. The audio codec used on the Zybo Z7-20 is the Analog Devices SSM2603. [Here is its data sheet](https://www.analog.com/media/en/technical-documentation/data-sheets/SSM2603.pdf), which includes many useful details on the capabilities of the audio codec.
@@ -87,33 +89,149 @@ The I2S transceiver takes the master clock signal and generates a serial clock (
 The I2S transceiver receives a serialised audio input signal at the sd_rx port, deserialises the data and exposes the audio input samples via the l_data_rx and r_data_rx ports. We can process these samples and then write them to the l_data_tx and r_data_rx ports. The I2S transceiver will then serialise the samples and send them to the audio codec via the sd_tx port.
 
 For the purpose of an audio bypass, all we need to do is to connect the l/r_data_rx ports to the corresponding l/r_data_tx ports. This brings us to the next step, which is generating a block diagram.
-# Generating a block diagram
-We need to connect the I2S transceiver to the audio input and output pins of the Zybo. To do this, we use 4 different IP blocks:
+# Generating a block design
+We need to connect the I2S transceiver to the audio input and output pins of the Zybo. To do this, we use 3 IP blocks:
 1. Clocking Wizard
 2. I2S Transceiver
 3. Processing System
-4. Processor System Reset (optional..?)
+They are connected like so:
+![[block_design_final.webp]]
+## Instantiate IP blocks
+Generate a new block design by clicking on "Generate Block Design" in the Flow Navigator. From here, we can add the IP blocks necessary for our design.
+
+Start by adding the Zynq7 Processing System IP by clicking on the "+" icon in the block design page. Search for "ZYNQ7 Processing System". Do the same for the Clocking Wizard IP. Finally, if you haven't already done so, add the I2S transceiver as a design source and drag it into the block design to add it as a design source.
+![[add_ip.webp|315]]
+![[config_zynq7.webp|610]]
+### Zynq7 Processing System
+Double click on the Zynq7 Processing System IP to customize it. Under the "Peripheral I/O Pins" tab, select the "I2C 0" peripheral.
+![[config_zynq7.webp]]
+Next, right-click on the output ports for DDR, FIXED_IO, and IIC_0 and select "Make External" from the drop-down menu. Rename the external port of IIC_0 to "iic".
+![[make_ext_i2c.webp]]
+Connect the "FCLK_RESET0_N" output port of the Zynq7 to the "reset_n" input pin of the I2S transceiver.
+### Clocking Wizard
+For the clocking wizard, set a single output clock with a frequency of 12.288MHz. This will act as the master clock signal for the I2S transceiver and the audio codec.
+![[config_clk_wiz.webp]]
+Connect the "clk_out1" output port of the Clocking Wizard to the "mclk" input port of the I2S transceiver.
+## Generate external ports
+To connect the components of our block design to the components on the Zybo, we generate external ports. This can be done by either selecting "Create Port" from the drop-down menu, or via the hotkey Ctrl+k. 
+![[create_port.webp]]
+Generate ports with the following names (note their direction!):
+- Direction: Input
+	- sys_clock
+	- ac_recdat
+	- sw0
+- Direction: Output
+	- ac_bclk
+	- ac_reclrc
+	- ac_pblrc
+	- ac_pbdat
+	- ac_mclk
+	- ac_muten
+	- led0
+It's OK to leave the Type as "Other". In order to map these ports to the components on the Zybo, however, **it is essential that the names of the ports match those defined in the constraints file.** Here is the constraints file; add it into your Vivado project via Add Sources > Add or create constraints.
+### Constraints file configuration
+`# clock`
+`set_property -dict { PACKAGE_PIN K17   IOSTANDARD LVCMOS33 } [get_ports { sys_clk }];`
+`create_clock -add -name sys_clk_pin -period 8.00 -waveform {0 4} [get_ports { sys_clk }];`
+`# switches and LEDs`
+`set_property -dict { PACKAGE_PIN G15   IOSTANDARD LVCMOS33 } [get_ports { sw0 }];`
+`set_property -dict { PACKAGE_PIN M14   IOSTANDARD LVCMOS33 } [get_ports { led0 }];`
+`set_property -dict { PACKAGE_PIN M15   IOSTANDARD LVCMOS33 } [get_ports { led1 }];`
+`set_property -dict { PACKAGE_PIN G14   IOSTANDARD LVCMOS33 } [get_ports { led2 }];`
+`# audio codec pins`
+`set_property -dict { PACKAGE_PIN R19   IOSTANDARD LVCMOS33 } [get_ports { ac_bclk }];`
+`set_property -dict { PACKAGE_PIN R17   IOSTANDARD LVCMOS33 } [get_ports { ac_mclk }];`
+`set_property -dict { PACKAGE_PIN P18   IOSTANDARD LVCMOS33 } [get_ports { ac_muten }];`
+`set_property -dict { PACKAGE_PIN R18   IOSTANDARD LVCMOS33 } [get_ports { ac_pbdat }];`
+`set_property -dict { PACKAGE_PIN T19   IOSTANDARD LVCMOS33 } [get_ports { ac_pblrc }];`
+`set_property -dict { PACKAGE_PIN R16   IOSTANDARD LVCMOS33 } [get_ports { ac_recdat }];`
+`set_property -dict { PACKAGE_PIN Y18   IOSTANDARD LVCMOS33 } [get_ports { ac_reclrc }];`
+`set_property -dict {PACKAGE_PIN N18 IOSTANDARD LVCMOS33} [get_ports iic_scl_io];`
+`set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS33} [get_ports iic_sda_io];`
+Note: The prefix of the port names of the I2C ports need to match too! This is why we renamed the external port to "iic" after the "Make external" step of setting up the Zynq7 Processing System.
+
+Now, we simply connect all the remaining ports. For clarity, I've added a table of source and destination ports:
+
+| Source port   | Source component | Destination port | Destination component |
+| ------------- | ---------------- | ---------------- | --------------------- |
+| DDR           | Zynq7 PS         | DDR              | External port         |
+| FIXED_IO      | Zynq7 PS         | FIXED_IO         | External port         |
+| IIC_0         | Zynq7 PS         | iic              | External port         |
+| sys_clk       | External port    | M_AXI_GP0_ACLK   | Zynq7 PS              |
+| sys_clk       | External port    | clk_in1          | Clocking Wizard       |
+| sw0           | External port    | led0             | External port         |
+| sw0           | External port    | ac_muten         | External port         |
+| mclk          | Clocking Wizard  | ac_mclk          | External port         |
+| mclk          | Clocking Wizard  | mclk             | I2S Transceiver       |
+| ac_recdat     | External port    | sd_rx            | I2S Transceiver       |
+| FCLK_RESET0_N | Zynq7 PS         | reset_n          | I2S Transceiver       |
+| sclk          | I2S Transceiver  | ac_bclk          | External port         |
+| ws            | I2S Transceiver  | ac_reclrc        | External port         |
+| ws            | I2S Transceiver  | ac_pblrc         | External port         |
+| sd_tx         | I2S Transceiver  | ac_pbdat         | External port         |
+| l_data_rx     | I2S Transceiver  | l_data_tx        | I2S Transceiver       |
+| r_data_rx     | I2S Transceiver  | r_data_tx        | I2S Transceiver       |
+At this point, you should have the same block design as the one shown at the beginning of the subsection "Generating a block design". Save your block design, right-click on the block design file, and select "Create HDL Wrapper...". For some reason, Vivado will not list the wrapper in my Design Sources if I select the default "Let Vivado manage wrapper and auto-update". Therefore, in the pop-up window, select "Copy generated wrapper to allow user edits". Finally, set the wrapper as the top-component by selecting "Set as top" in the drop-down menu.
+
+![[create_wrapper.webp]]![[set_as_top.webp]]
+## Generate hardware platform
+The final step is to create a hardware platform that we can target in Vitis. Start by selecting "Generate Bitstream" under the Flow Navigator. This will also run Synthesis and Implementation on the block design if it is out of date. The entire process can take a few minutes.
+
+Once it is done, select File > Export > Export Hardware... to open the export hardware wizard.
+![[export_hardware.webp]]
+![[include_bitstream.webp]]
+![[export_hardware_location.webp]]
+Be sure to select "Include bitstream", then save it in a location of your choice. The XSA file exported will be used as the hardware specification for the Vitis project. This brings us to the final step. 
+# Programming your Zybo with Vitis
+## Create a Vitis project
+To initialize the audio codec, we need to create a Vitis project. This can be done in Vivado by clicking on Tools > Launch Vitis IDE. You'll be prompted to "Select a directory as a workspace". I like to set it within the same directory as the Vivado project I'm working on.
+![[vitis_workspace_select.webp]]
+
+Select "Create Application project".![[vitis_welcome.webp]]
+
+At the next page, click on the tab labelled "Create a new platform from hardware (XSA)". Under "Hardware Specification", select the XSA file we exported from Vivado. This contains the hardware design we generated in Vivado. 
+![[select_hardware_spec.webp]]
+
+Accept the default processor ("ps7_cortexa9_0") and operating system ("standalone").
+
+![[new_application_project.webp]]
+
+![[application_project_domain.webp]]
+Next, select "Empty Application (C)".
+![[create_empty_application.webp]]
+
+Create a new C file in the "src" folder of the application project to specify the audio codec initialisation in.
+![[create_new_file.webp]]
+Build the application project. After the build process has completed, you can plug in your Zybo --- remember to turn it on!
+
+Now, finally, run the application project.
+![[programming_fpga_progress.webp]]
+
+Once that is done, you can test if it is working. Plug in your source audio into the port labelled "Line In", and your headphones into the port labelled "HPH Out". Turn off the mute switch (SW0); the corresponding LED should turn on as well, and you should now hear audio running through your Zybo!
+
+
+
 Steps:
-- Expose DDR, FIXED_IO, I2C ports on Zynq PS
-- Configure clocking wizard
-    - 12.288 for I2S transceiver mclk
-    - 24.576 for ac_mclk
-- Initialize ports in constraints file
-- Connect components (include screenshot) - show how to make ports external
-- Right-clock block design and select "Create HDL Wrapper" (select "let user", for some reason I can't set it to the top component when I let vivado control updates)
-- Set wrapper as top component
-- Run synthesis and implementation and generate bitstream
-- Export hardware platform (File > Export > Export hardware)
-- Launch Vitis
-- Create Platform Project
-    - Create a new platform from hardware (XSA)
-    - Under Hardware Specification, select the exported hardware platform
-- Create New Application Project (in platform project)
-    - Select platform you just created
-    - Select standalone_domain
-    - Select Empty C/C++ project
-- Under application project, make a new C file to write your audio codec initialization in
-    - audio_init_system > audio_init > src > ac_init.c
+- ~~Expose DDR, FIXED_IO, I2C ports on Zynq PS~~
+- ~~Configure clocking wizard~~
+    - ~~12.288 for I2S transceiver mclk and ac_mclk~~
+    - ~~24.576 for ac_mclk~~
+- ~~Initialize ports in constraints file~~
+- ~~Connect components (include screenshot) - show how to make ports external~~
+- ~~Right-clock block design and select "Create HDL Wrapper" (select "let user", for some reason I can't set it to the top component when I let vivado control updates)~~
+- ~~Set wrapper as top component~~
+- ~~Run synthesis and implementation and generate bitstream~~
+- ~~Export hardware platform (File > Export > Export hardware)~~
+- ~~Launch Vitis~~
+- ~~Create Platform Project~~
+    - ~~Create a new platform from hardware (XSA)~~
+    - ~~Under Hardware Specification, select the exported hardware platform~~
+- ~~Create New Application Project (in platform project)~~
+    - ~~Select platform you just created~~
+    - ~~Select standalone_domain~~
+    - ~~Select Empty C/C++ project~~
+- ~~Under application project, make a new C file to write your audio codec initialization in~~
+    - ~~audio_init_system > audio_init > src > ac_init.c~~
 ## Clocking Wizard configuration
 We need two clock signals to drive the audio system. One at 12.288 MHz, and the other at 24.576MHz. From the documentation of the I2S transceiver,
 
@@ -131,23 +249,4 @@ The reset signal was taken from the Zynq processing system (via the "ext_reset_i
 
 According to Xilinx's documentation, the signal generated by the peripheral pin is meant for "all peripherals attached to interconnect that is synchronous with the "slowest_sync_clk".
 
-# Constraints file configuration
-Here are the contents of the constraints file.
-`# clock`
-`set_property -dict { PACKAGE_PIN K17   IOSTANDARD LVCMOS33 } [get_ports { sys_clk }];`
-`create_clock -add -name sys_clk_pin -period 8.00 -waveform {0 4} [get_ports { sys_clk }];`
-`# switches and LEDs`
-`set_property -dict { PACKAGE_PIN G15   IOSTANDARD LVCMOS33 } [get_ports { sw0 }];`
-`set_property -dict { PACKAGE_PIN M14   IOSTANDARD LVCMOS33 } [get_ports { led }];`
-`set_property -dict { PACKAGE_PIN M15   IOSTANDARD LVCMOS33 } [get_ports { led1 }];`
-`set_property -dict { PACKAGE_PIN G14   IOSTANDARD LVCMOS33 } [get_ports { led2 }];`
-`# audio codec pins`
-`set_property -dict { PACKAGE_PIN R19   IOSTANDARD LVCMOS33 } [get_ports { ac_bclk }];`
-`set_property -dict { PACKAGE_PIN R17   IOSTANDARD LVCMOS33 } [get_ports { ac_mclk }];`
-`set_property -dict { PACKAGE_PIN P18   IOSTANDARD LVCMOS33 } [get_ports { ac_muten }];`
-`set_property -dict { PACKAGE_PIN R18   IOSTANDARD LVCMOS33 } [get_ports { ac_pbdat }];`
-`set_property -dict { PACKAGE_PIN T19   IOSTANDARD LVCMOS33 } [get_ports { ac_pblrc }];`
-`set_property -dict { PACKAGE_PIN R16   IOSTANDARD LVCMOS33 } [get_ports { ac_recdat }];`
-`set_property -dict { PACKAGE_PIN Y18   IOSTANDARD LVCMOS33 } [get_ports { ac_reclrc }];`
-`set_property -dict {PACKAGE_PIN N18 IOSTANDARD LVCMOS33} [get_ports iic_scl_io];`
-`set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS33} [get_ports iic_sda_io];`
+
