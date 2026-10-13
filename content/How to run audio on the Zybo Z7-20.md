@@ -44,6 +44,7 @@ The code below sets the register values for our audio codec configuration. We wi
     // Audio codec settings
     Status |= SSMRegSet(&Iic, 0, 0b000010111); // L in volume
     Status |= SSMRegSet(&Iic, 1, 0b000010111); // R in volume
+
     Status |= SSMRegSet(&Iic, 2, 0b001011111); // L out volume
     Status |= SSMRegSet(&Iic, 3, 0b001011111); // R out volume
     Status |= SSMRegSet(&Iic, 4, 0b000010010); // enable DAC, disable mic
@@ -191,6 +192,7 @@ Now, we simply connect all the remaining ports. For clarity, I've added a table 
 | sd_tx         | I2S Transceiver  | ac_pbdat         | External port         |
 | l_data_rx     | I2S Transceiver  | l_data_tx        | I2S Transceiver       |
 | r_data_rx     | I2S Transceiver  | r_data_tx        | I2S Transceiver       |
+
 At this point, you should have the same block design as the one shown at the beginning of the subsection "Generate block design". Save your block design, right-click on the block design file, and select "Create HDL Wrapper...". For some reason, Vivado will not list the wrapper in Design Sources if the default "Let Vivado manage wrapper and auto-update" is selected. Therefore, in the pop-up window, select "Copy generated wrapper to allow user edits". Finally, set the wrapper as the top-component by selecting "Set as top" in the drop-down menu.
 
 ![[create_wrapper.webp]]![[set_as_top.webp]]
