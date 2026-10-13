@@ -30,7 +30,8 @@ What we're interested in for this post is the Register Map on page 19.
 ![[ssm2603_register_map.webp]]The bits written to these registers allow us to configure the behaviour of the SSM2603. The details of each of these settings are included in the datasheet (pages 20-29).
 
 The code below sets the register values for our audio codec configuration. We will only be using it in the final step, where we configure the Zybo using Vitis. Nonetheless, it is clearer to explain the audio codec configuration earlier.
-`int SSMSetConfig()
+```
+int SSMSetConfig()
 {
     int Status;
 
@@ -68,7 +69,8 @@ The code below sets the register values for our audio codec configuration. We wi
     }
 
     return XST_SUCCESS;
-}`
+}
+```
 You might have noticed that register 4 has an option to enable bypass (D3). While setting this bit to 1 would achieve an audio bypass, it defeats the primary purpose of this guide, which is to show how to expose the audio signal data being received and transmitted by the audio codec. It is therefore set to 0.
 
 I will now briefly explain the configuration set by these register values below.
@@ -151,24 +153,26 @@ Generate ports with the following names (note their direction!):
 	- led0
 It's OK to leave the Type as "Other". In order to map these ports to the components on the Zybo, however, **it is essential that the names of the ports match those defined in the constraints file.** Here is the constraints file; add it into your Vivado project via Add Sources > Add or create constraints.
 ### Constraints file configuration
-`# clock`
-`set_property -dict { PACKAGE_PIN K17   IOSTANDARD LVCMOS33 } [get_ports { sys_clk }];`
-`create_clock -add -name sys_clk_pin -period 8.00 -waveform {0 4} [get_ports { sys_clk }];`
-`# switches and LEDs`
-`set_property -dict { PACKAGE_PIN G15   IOSTANDARD LVCMOS33 } [get_ports { sw0 }];`
-`set_property -dict { PACKAGE_PIN M14   IOSTANDARD LVCMOS33 } [get_ports { led0 }];`
-`set_property -dict { PACKAGE_PIN M15   IOSTANDARD LVCMOS33 } [get_ports { led1 }];`
-`set_property -dict { PACKAGE_PIN G14   IOSTANDARD LVCMOS33 } [get_ports { led2 }];`
-`# audio codec pins`
-`set_property -dict { PACKAGE_PIN R19   IOSTANDARD LVCMOS33 } [get_ports { ac_bclk }];`
-`set_property -dict { PACKAGE_PIN R17   IOSTANDARD LVCMOS33 } [get_ports { ac_mclk }];`
-`set_property -dict { PACKAGE_PIN P18   IOSTANDARD LVCMOS33 } [get_ports { ac_muten }];`
-`set_property -dict { PACKAGE_PIN R18   IOSTANDARD LVCMOS33 } [get_ports { ac_pbdat }];`
-`set_property -dict { PACKAGE_PIN T19   IOSTANDARD LVCMOS33 } [get_ports { ac_pblrc }];`
-`set_property -dict { PACKAGE_PIN R16   IOSTANDARD LVCMOS33 } [get_ports { ac_recdat }];`
-`set_property -dict { PACKAGE_PIN Y18   IOSTANDARD LVCMOS33 } [get_ports { ac_reclrc }];`
-`set_property -dict {PACKAGE_PIN N18 IOSTANDARD LVCMOS33} [get_ports iic_scl_io];`
-`set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS33} [get_ports iic_sda_io];`
+```
+# clock
+set_property -dict { PACKAGE_PIN K17   IOSTANDARD LVCMOS33 } [get_ports { sys_clk }];
+create_clock -add -name sys_clk_pin -period 8.00 -waveform {0 4} [get_ports { sys_clk }];
+# switches and LEDs
+set_property -dict { PACKAGE_PIN G15   IOSTANDARD LVCMOS33 } [get_ports { sw0 }];
+set_property -dict { PACKAGE_PIN M14   IOSTANDARD LVCMOS33 } [get_ports { led0 }];
+set_property -dict { PACKAGE_PIN M15   IOSTANDARD LVCMOS33 } [get_ports { led1 }];
+set_property -dict { PACKAGE_PIN G14   IOSTANDARD LVCMOS33 } [get_ports { led2 }];
+# audio codec pins
+set_property -dict { PACKAGE_PIN R19   IOSTANDARD LVCMOS33 } [get_ports { ac_bclk }];
+set_property -dict { PACKAGE_PIN R17   IOSTANDARD LVCMOS33 } [get_ports { ac_mclk }];
+set_property -dict { PACKAGE_PIN P18   IOSTANDARD LVCMOS33 } [get_ports { ac_muten }];
+set_property -dict { PACKAGE_PIN R18   IOSTANDARD LVCMOS33 } [get_ports { ac_pbdat }];
+set_property -dict { PACKAGE_PIN T19   IOSTANDARD LVCMOS33 } [get_ports { ac_pblrc }];
+set_property -dict { PACKAGE_PIN R16   IOSTANDARD LVCMOS33 } [get_ports { ac_recdat }];
+set_property -dict { PACKAGE_PIN Y18   IOSTANDARD LVCMOS33 } [get_ports { ac_reclrc }];
+set_property -dict {PACKAGE_PIN N18 IOSTANDARD LVCMOS33} [get_ports iic_scl_io];
+set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS33} [get_ports iic_sda_io];
+```
 Note: The prefix of the port names of the I2C ports need to match too! This is why we renamed the external port to "iic" after the "Make external" step of setting up the Zynq7 Processing System.
 
 Now, we simply connect all the remaining ports. For clarity, I've added a table of source and destination ports:
