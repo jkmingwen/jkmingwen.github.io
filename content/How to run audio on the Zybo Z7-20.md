@@ -4,10 +4,8 @@ tags:
   - fpga
   - audio
 ---
-
 A guide for anyone who would like to directly access the audio signals going in and out of an FPGA. In this post, I will demonstrate how one might access the audio signals received and transmitted by the Zybo Z7-20 by implementing a simple audio bypass. In more general terms, we will take an audio signal, received via the "Line In" ports of the Zybo, and send it out through the "HPH Out" port. This implementation would be a good starting point for any audio signal processing project that you might want to implement on an FPGA.
 
-(add diagram of bypass, and where audio processing would sit.)
 
 # Related works
 There was once a [blog post](https://setoti-hatenablog-com/entry/zybo_synthesizer_2_Audio_Codec) that explained how to access the audio signals in a manner similar to what I describe in this post. Unfortuntately, it has since been taken down, and I can no longer find it on any internet archives. 
