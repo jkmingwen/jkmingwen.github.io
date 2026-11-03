@@ -1,6 +1,5 @@
 ---
 tags:
-draft: "true"
 ---
 A video synthesizer is a tool that takes some form of input and manipulates or utilises said input to produce a visual signal.
 
