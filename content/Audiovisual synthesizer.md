@@ -2,9 +2,11 @@
 tags: audio
 draft: "true"
 ---
-Some demos of the audiovisual synthesizer I wrote for my Bachelor's Capstone Project. It was written in openFrameworks.
+An audiovisual synthesizer is a [video synthesizer](Video synthesizers) whose images are affected by an input audio signal.
 
-There were 3 patterns available.
+Here are some demos of the audiovisual synthesizer I wrote for my Bachelor's Capstone Project. It was written in openFrameworks and deployed on an  [ODROID XU4](https://wiki.odroid.com/odroid-xu4/odroid-xu4).
+
+There were 3 patterns available: Circles, Clouds, and Shimmer.
 
 ## Circles
 %%Explain patterns and include screenshots.%%

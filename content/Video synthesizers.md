@@ -14,6 +14,6 @@ More modern visual synthesizers include:
 - [Synchronator](https://www.synchronator.com/video.html)
 - [TouchDesigner](https://derivative.ca/)
 ## Audio-to-visual synthesis
-A possible input for a video synthesizer is an audio signal. My first exposure to this was in the music visualisation features available in Windows Media Player and iTunes. Visuals that are associated with audio create a feeling of "synchresis", that Michel Chion describes in great detail in his book, *Audio-Vision: Sound on Screen (1994)*.
+A possible input for a video synthesizer is an audio signal. My first exposure to this form of audio-driven video synthesis was in the music visualisation features available in Windows Media Player and iTunes. Visuals that are associated with audio create a feeling of "synchresis", a term that Michel Chion describes in great detail in his book, *Audio-Vision: Sound on Screen (1994)*.
 
-Audio-to-visual synthesis was the focus of my Bachelor's capstone project, in which I wrote an [[audiovisual synthesizer]] in openFrameworks, and ran it on an Odroid XU4. I'm currently working on a reimplementation of my work in JUCE, with the use of OpenGL to parallelise the computations.
+Audio-to-visual synthesis was the focus of my Bachelor's capstone project, in which I wrote an [[audiovisual synthesizer]] in openFrameworks, and ran it on an [ODROID XU4](https://wiki.odroid.com/odroid-xu4/odroid-xu4). Many things have happened since then, and as I've grown as a software engineer, I've found many aspects of my implementation that I think I could improve upon. I'm currently working on a reimplementation of my work in JUCE, with the use of OpenGL to parallelise the computations. 
