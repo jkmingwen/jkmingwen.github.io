@@ -3,7 +3,7 @@ tags: audio
 ---
 An audiovisual synthesizer is a [[Video synthesizers | video synthesizer]] whose images are affected by an input audio signal.
 
-Here is an overview of the audiovisual synthesizer I wrote for my Bachelor's Capstone Project. It was written in openFrameworks and deployed on an [ODROID XU4](https://wiki.odroid.com/odroid-xu4/odroid-xu4). The repository of the project can be found [here](https://github.com/jkmingwen/CapstoneProject).
+Here is an overview of the audiovisual synthesizer I wrote for my Bachelor's Capstone Project. It was written in [openFrameworks](https://openframeworks.cc/) and deployed on an [ODROID XU4](https://wiki.odroid.com/odroid-xu4/odroid-xu4). The repository of the project can be found [here](https://github.com/jkmingwen/CapstoneProject).
 
 The video synthesizer had 3 patterns implemented: Circles, Clouds, and Shimmer.
 
