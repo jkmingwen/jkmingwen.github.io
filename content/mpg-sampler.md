@@ -10,7 +10,7 @@ description: A browser-based drum machine and sampler, inspired by the Akai MPC,
 
 %% TODO: set the real date above, and embed the performance video below if you still have it. %%
 
-The **MPG** is a browser-based sampler and step sequencer I built for the *Sound and Signal* course at Goldsmiths. It's loosely modelled on the Akai MPC. The course provided us with a bare template with a start/stop button and a single working pad, and I built the rest of the instrument from there. A video demonstration of its capabilities can be found [here](https://youtu.be/piW4eBtyXqg?si=lw-T_3pLi8vf9ucw).
+The **MPG** is a browser-based sequencer I built for the *Sound and Signal* course at Goldsmiths. It's loosely modelled on the Akai MPC. The course provided us with a bare template with a start/stop button and a single working pad, and I built the rest of the instrument from there. A video demonstration of its capabilities can be found [here](https://youtu.be/piW4eBtyXqg?si=lw-T_3pLi8vf9ucw).
 ![[mpg-sampler-1793867155777.webp]]
 ## What it does
 

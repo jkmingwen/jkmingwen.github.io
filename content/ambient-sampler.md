@@ -5,11 +5,10 @@ tags:
   - audio
   - max-msp
   - dsp
-  - midi
 description: A MIDI-controlled sampler instrument in Max/MSP for performing an ambient piece from guitar, vocal and drum samples.
 ---
 %% Upload video to Youtube %%
-The **Ambient Sampler** is a Max/MSP patch I built for *Music Computing 1* at Goldsmiths, along with an ambient piece performed on it. I wanted something that felt ambient but kept moving from start to finish. The volume swells of the piano and guitar in Jay Som's *Lipstick Stains* were the main inspiration. The piece begins and ends with a droning guitar. Its pitch shifts over the course of the piece to act as a melody, while oscillating filters and delays on the guitar and vocals add texture. A video demo can be found [here](https://drive.google.com/open?id=1ovyAWYkksEiAv8qS3SGu_qamXeiO0AYR).
+The **Ambient Sampler** is a MaxMSP patch I built for *Music Computing 1* at Goldsmiths, along with an ambient piece performed on it. I wanted something that felt ambient but kept moving from start to finish. The volume swells of the piano and guitar in Jay Som's *Lipstick Stains* were the main inspiration. The piece begins and ends with a droning guitar. Its pitch shifts over the course of the piece to act as a melody, while oscillating filters and delays on the guitar and vocals add texture. A video demo can be found [here](https://drive.google.com/open?id=1ovyAWYkksEiAv8qS3SGu_qamXeiO0AYR).
 
 ![[ambient-sampler-1793886306652.webp]]
 ## Structure

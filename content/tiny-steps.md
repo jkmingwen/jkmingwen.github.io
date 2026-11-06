@@ -5,7 +5,6 @@ tags:
   - audio
   - max-msp
   - dsp
-  - synthesis
   - fft
 description: A live-performance patch in Max/MSP with seven polyphonic instruments, including resonant-filter, sample-and-hold, granular and FFT vocoder synths.
 ---

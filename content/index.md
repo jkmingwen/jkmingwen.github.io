@@ -4,14 +4,15 @@ I've labelled this website a journal as I think of it as a collection of ideas t
 ## Active Projects
 * [[Audiovisual synthesizer]]
 ## Knowledge Base
-* [[How to run audio on the Zybo Z7-20]]
+* [[How to run audio on an FPGA]]
 ## Research and Publications
 - [K-periodic scheduling for throughput-buffering trade-off exploration of CSDF](https://dl.acm.org/doi/pdf/10.1145/3559760)
 - [Static Performance Analysis of Faust Programs Using Dataflow Modelling](https://zenodo.org/records/6799593)
 ## Past Projects
-- [[mpg-sampler|MPG Sampler]]
-- [[tiny-steps|Tiny Steps]]
-- [[ambient-sampler|Ambient Sampler]]
+- [[mpg-sampler|MPG Sampler]]: Browser-based sequencer
+- [[tiny-steps|Tiny Steps]]: MaxMSP patch showcasing the use of FFT vocoders and granular synthesis
+- [[ambient-sampler|Ambient Sampler]]: MaxMSP patch driven by step sequencers
+- [[Kubo]] : an augmented electric guitar with separated signal chains and wireless effects control
 %% - [[hells-bells|Hells Bells]] %%
 %% - [[space-launch|Space Launch]] %%
 %% - [[vj-lights|VJ Lights]] %% 
