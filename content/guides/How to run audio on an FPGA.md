@@ -1,8 +1,10 @@
 ---
+title: How to run audio on an FPGA
 tags:
   - hardware
   - fpga
   - audio
+description: A step-by-step guide to passing audio through the Zybo Z7-20's SSM2603 codec, as a starting point for FPGA audio processing.
 ---
 A guide for anyone who would like to directly access the audio signals going in and out of an FPGA. In this post, I will demonstrate how one might access the audio signals received and transmitted by the Zybo Z7-20 by implementing a simple audio bypass. In more general terms, we will take an audio signal, received via the "Line In" ports of the Zybo, and send it out through the "HPH Out" port. This implementation would be a good starting point for any audio signal processing project that you might want to implement on an FPGA.
 

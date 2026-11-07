@@ -1,7 +1,12 @@
 ---
-tags: audio
+title: Audiovisual Synthesizer
+tags:
+  - audio
+  - video-synthesis
+  - openframeworks
+description: An audio-reactive video synthesizer written in openFrameworks for my Bachelor's capstone, running on an ODROID XU4.
 ---
-An audiovisual synthesizer is a [[Video synthesizers | video synthesizer]] whose images are affected by an input audio signal.
+An audiovisual synthesizer is a [[Video synthesizers|video synthesizer]] whose images are affected by an input audio signal.
 
 Here is an overview of the audiovisual synthesizer I wrote for my Bachelor's Capstone Project. It was written in [openFrameworks](https://openframeworks.cc/) and deployed on an [ODROID XU4](https://wiki.odroid.com/odroid-xu4/odroid-xu4). The repository of the project can be found [here](https://github.com/jkmingwen/CapstoneProject).
 
