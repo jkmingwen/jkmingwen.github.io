@@ -7,16 +7,16 @@ Here is an overview of the audiovisual synthesizer I wrote for my Bachelor's Cap
 
 The video synthesizer had 3 patterns implemented: Circles, Clouds, and Shimmer.
 
-## Circles ([video demo](https://youtu.be/td-MOom6OSc?si=r94SllRCJLfxBYmh))
-![[Audiovisual synthesizer-1793787494719.webp]]
+## Circles
+![](https://youtu.be/td-MOom6OSc?si=r94SllRCJLfxBYmh)
 Circles is made up of a series of horizontally adjacent ellipses. Each ellipse corresponds to a sample in a buffer storing audio input samples. The amplitude of the sample is mapped to its vertical displacement while the overall intensity of the signal is mapped to the size of the ellipses.
-## Clouds ([video demo](https://youtu.be/C0_xnJEDzDE?si=9XL2DBZNF9_4TOYR))
-![[Audiovisual synthesizer-1793787507145.webp]]
+## Clouds
+![](https://youtu.be/C0_xnJEDzDE?si=9XL2DBZNF9_4TOYR)
 Clouds is based on a swarming algorithm by Konstantin Makhmutov. Every "particle", represented by an ellipse, experiences an attractive force towards every other particle on the screen above a set proximity threshold. Conversely, a repelling force is applied between particles whose proximity falls below the threshold.
 
 In the Clouds pattern, the intensity of the audio signal is mapped to the magnitude of the force experienced by each particle. The intensity is also mapped to the radii of the ellipses.
-## Shimmer ([video demo](https://youtu.be/40OoNjl2jPE?si=-M9_XRpZmqzrbI9o))
-![[Audiovisual synthesizer-1793787513832.webp]]
+## Shimmer
+![](https://youtu.be/40OoNjl2jPE?si=-M9_XRpZmqzrbI9o)
 Shimmer is made up of an array of lines that rotate about fixed points to collectively form ripple effects. The angle of each line's rotation is determined by a Perlin Noise function that is increasingly offset with each element. Perlin Noise is also used to determine the opacity of each line, forming vignettes that move across the screen independently of the audio signal. The intensity of the audio signal determines the speed of each line's rotation.
 
 ## Re-implementation in JUCE

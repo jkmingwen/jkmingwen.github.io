@@ -8,7 +8,9 @@ tags:
   - instrument-design
 description: An augmented electric guitar with hand-wound duophonic pickups that split the strings into three signal paths, plus wireless servo control of effects pedals.
 ---
-**Kubo** is an augmented electric guitar I built with Nathaniel and Abhinav for *Interface Design for Time-based Art Forms* at Yale-NUS. The augmentation consists of duophonic pickups and wireless control of effects pedals. Our main reference point was the modern MIDI keyboard. A keyboard can apply different sounds to different ranges of keys, so a player can have a rhythm and a lead tone at the same time, and its effect knobs stay within reach while playing. Kubo brings both of those ideas to the guitar. A video demonstration can be found [here](https://youtu.be/GVYjbwj_Ycw?si=IovsiobI4n_wm00o).
+**Kubo** is an augmented electric guitar I built with Nathaniel and Abhinav for *Interface Design for Time-based Art Forms* at Yale-NUS. The augmentation consists of duophonic pickups and wireless control of effects pedals. Our main reference point was the modern MIDI keyboard. A keyboard can apply different sounds to different ranges of keys, so a player can have a rhythm and a lead tone at the same time, and its effect knobs stay within reach while playing. The idea with Kubo was to bring both of those ideas to the guitar, and to see what would flourish. 
+
+![](https://youtu.be/GVYjbwj_Ycw?si=IovsiobI4n_wm00o)
 
 The name of the project came from a movie I had recently watched, *Kubo and the Two Strings*, referencing the pairs of strings that the signal would be split into. That said, here is a picture of the final product:
 ![[kubo-guitar.webp]]
